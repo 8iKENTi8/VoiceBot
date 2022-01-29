@@ -270,7 +270,7 @@ async function connect(msg, mapKey) {
             'text_Channel': text_Channel,
             'voice_Channel': voice_Channel,
             'voice_Connection': voice_Connection,
-            'selected_lang': 'en',
+            'selected_lang': 'ru',
             'debug': false,
         });
         speak_impl(voice_Connection, mapKey)
@@ -292,7 +292,7 @@ if (SPEECH_METHOD === 'vosk') {
   vosk.setLogLevel(-1);
   // MODELS: https://alphacephei.com/vosk/models
   recs = {
-    'en': new vosk.Recognizer({model: new vosk.Model('vosk_models/en'), sampleRate: 48000}),
+    'ru': new vosk.Recognizer({model: new vosk.Model('vosk_models/ru'), sampleRate: 48000}),
     // 'fr': new vosk.Recognizer({model: new vosk.Model('vosk_models/fr'), sampleRate: 48000}),
     // 'es': new vosk.Recognizer({model: new vosk.Model('vosk_models/es'), sampleRate: 48000}),
   }
