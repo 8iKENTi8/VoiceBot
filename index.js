@@ -114,38 +114,38 @@ function listWitAIApps(cb) {
     })
     req.end()
 }
-// function updateWitAIAppLang(appID, lang, cb) {
-//     const options = {
-//       hostname: 'api.wit.ai',
-//       port: 443,
-//       path: '/apps/' + appID,
-//       method: 'PUT',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': 'Bearer '+WITAI_TOK,
-//       },
-//     }
-//     const data = JSON.stringify({
-//       lang
-//     })
+function updateWitAIAppLang(appID, lang, cb) {
+    const options = {
+      hostname: 'api.wit.ai',
+      port: 443,
+      path: '/apps/' + appID,
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+WITAI_TOK,
+      },
+    }
+    const data = JSON.stringify({
+      lang
+    })
 
-//     const req = https.request(options, (res) => {
-//       res.setEncoding('utf8');
-//       let body = ''
-//       res.on('data', (chunk) => {
-//         body += chunk
-//       });
-//       res.on('end',function() {
-//         cb(JSON.parse(body))
-//       })
-//     })
-//     req.on('error', (error) => {
-//       console.error(error)
-//       cb(null)
-//     })
-//     req.write(data)
-//     req.end()
-// }
+    const req = https.request(options, (res) => {
+      res.setEncoding('utf8');
+      let body = ''
+      res.on('data', (chunk) => {
+        body += chunk
+      });
+      res.on('end',function() {
+        cb(JSON.parse(body))
+      })
+    })
+    req.on('error', (error) => {
+      console.error(error)
+      cb(null)
+    })
+    req.write(data)
+    req.end()
+}
 
 //////////////////////////////////////////
 //////////////////////////////////////////
@@ -210,22 +210,22 @@ discordClient.on('message', async (msg) => {
         else if (msg.content.trim().toLowerCase() == _CMD_TEST) {
             msg.reply('hello back =)')
         }
-        // else if (msg.content.split('\n')[0].split(' ')[0].trim().toLowerCase() == _CMD_LANG) {
-        //     if (SPEECH_METHOD === 'witai') {
-        //       const lang = msg.content.replace(_CMD_LANG, '').trim().toLowerCase()
-        //       listWitAIApps(data => {
-        //         if (!data.length)
-        //           return msg.reply('no apps found! :(')
-        //         for (const x of data) {
-        //           updateWitAIAppLang(x.id, lang, data => {
-        //             if ('success' in data)
-        //               msg.reply('succes!')
-        //             else if ('error' in data && data.error !== 'Access token does not match')
-        //               msg.reply('Error: ' + data.error)
-        //           })
-        //         }
-        //       })
-        //     }
+        else if (msg.content.split('\n')[0].split(' ')[0].trim().toLowerCase() == _CMD_LANG) {
+            if (SPEECH_METHOD === 'witai') {
+              const lang = msg.content.replace(_CMD_LANG, '').trim().toLowerCase()
+              listWitAIApps(data => {
+                if (!data.length)
+                  return msg.reply('no apps found! :(')
+                for (const x of data) {
+                  updateWitAIAppLang(x.id, lang, data => {
+                    if ('success' in data)
+                      msg.reply('succes!')
+                    else if ('error' in data && data.error !== 'Access token does not match')
+                      msg.reply('Error: ' + data.error)
+                  })
+                }
+              })
+            }
          else if (SPEECH_METHOD === 'vosk') {
               let val = guildMap.get(mapKey);
               const lang = msg.content.replace(_CMD_LANG, '').trim().toLowerCase()
@@ -234,7 +234,7 @@ discordClient.on('message', async (msg) => {
               msg.reply('Error: this feature is only for Google')
             }
         }
-   // } 
+    } 
     catch (e) {
         console.log('discordClient message: ' + e)
         msg.reply('Error#180: Something went wrong, try again or contact the developers if this keeps happening.');
